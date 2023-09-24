@@ -79,6 +79,20 @@ async fn find_person(State(people) : State<AppState>, Path(person_id): Path<Uuid
 }
 
 async fn create_person(State(people): State<AppState>, Json(person_request): Json<PersonRequest>) -> impl IntoResponse {
+    
+    if person_request.name.len() > 100 || person_request.nick.len() > 32 {
+        return Err(StatusCode::UNPROCESSABLE_ENTITY)
+    }
+
+    match person_request.stack {
+        Some(ref stack) => {
+            if stack.iter().any(|tech| tech.len() > 32){
+                return Err(StatusCode::UNPROCESSABLE_ENTITY)
+            }
+        }
+        None => {}
+    }
+    
     let id = Uuid::now_v7();
     let person = Person {
         id, 
@@ -88,7 +102,7 @@ async fn create_person(State(people): State<AppState>, Json(person_request): Jso
         stack: person_request.stack,
     };
     people.write().await.insert(id, person.clone());
-    (StatusCode::OK, Json(person))
+    Ok((StatusCode::OK, Json(person)))
 
 }
 
