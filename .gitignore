@@ -1,0 +1,16 @@
+# Arquivos e diretórios gerados pelo Cargo
+/target/
+/Cargo.lock
+
+# Arquivos gerados pelo Rust
+*.rs.bk
+*.rlib
+*.rmeta
+
+# Arquivos de compilação
+debug/
+release/
+
+# Arquivos de configuração do editor (Opcional - adicione conforme necessário)
+.vscode/
+.idea/
